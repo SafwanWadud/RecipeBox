@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { SignInButton, UserButton } from '@clerk/clerk-react'
+import { SignInButton, SignUpButton, UserButton } from '@clerk/clerk-react'
 import { Authenticated, Unauthenticated } from 'convex/react'
 
 const features = [
@@ -51,14 +51,14 @@ export const Landing = () => {
                   Sign In
                 </Button>
               </SignInButton>
-              <SignInButton>
+              <SignUpButton>
                 <Button className="bg-white text-primary hover:bg-white/90">
                   Get Started
                 </Button>
-              </SignInButton>
+              </SignUpButton>
             </Unauthenticated>
             <Authenticated>
-              <UserButton />
+                <UserButton />
             </Authenticated>
           </div>
         </nav>

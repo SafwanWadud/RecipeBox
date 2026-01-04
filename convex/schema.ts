@@ -7,4 +7,17 @@ export default defineSchema({
         // this the Clerk ID, stored in the subject JWT field
         externalId: v.string(),
     }).index("byExternalId", ["externalId"]),
+    recipes: defineTable({
+        name: v.string(),
+        ingredients: v.optional(v.string()),
+        directions: v.optional(v.string()),
+        rating: v.optional(v.number()),
+        userId: v.id("users"),
+        recipeBookId: v.id("recipeBooks"),
+    }).index("byRecipeBook", ["recipeBookId"]),
+    recipeBooks: defineTable({
+        name: v.string(),
+        userId: v.id("users"),
+        recipes: v.array(v.id("recipes")),
+    }).index("byUser", ["userId"]),
 });
