@@ -2,14 +2,6 @@
 trigger: always_on
 ---
 
----
-
-description:
-globs:
-alwaysApply: true
-
----
-
 # Bun Package Management and Execution Policy
 
 ## Package Management with Bun
