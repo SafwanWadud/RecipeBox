@@ -1,3 +1,4 @@
+import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SignInButton, SignUpButton, UserButton } from "@clerk/clerk-react";
@@ -58,6 +59,7 @@ export const Landing = () => {
                         <Authenticated>
                             <UserButton />
                         </Authenticated>
+                        <ModeToggle />
                     </div>
                 </nav>
 

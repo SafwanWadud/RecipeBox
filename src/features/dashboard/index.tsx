@@ -7,6 +7,7 @@ import { Link, Navigate } from "@tanstack/react-router";
 import { api } from "@convex/_generated/api";
 import { Authenticated, AuthLoading, useConvexAuth, useQuery } from "convex/react";
 import { CreateRecipeBookDialog } from "./components/create-recipeBook-dialog";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export const Dashboard = () => {
     const { user } = useUser();
@@ -44,6 +45,7 @@ export const Dashboard = () => {
                                     <Input type="search" placeholder="Search recipes..." className="pl-9 w-64" />
                                 </div>
                                 <UserButton />
+                                <ModeToggle />
                             </div>
                         </div>
                     </header>
