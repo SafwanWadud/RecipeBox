@@ -8,13 +8,6 @@ import { api } from "@convex/_generated/api";
 import { Authenticated, AuthLoading, useConvexAuth, useQuery } from "convex/react";
 import { CreateRecipeBookDialog } from "./components/create-recipeBook-dialog";
 
-// Placeholder data for UI demonstration
-const PLACEHOLDER_BOOKS = [
-    { id: 1, name: "Grandma's Favorites", recipeCount: 12, color: "bg-orange-100" },
-    { id: 2, name: "Weeknight Dinners", recipeCount: 8, color: "bg-blue-100" },
-    { id: 3, name: "Holiday Feast", recipeCount: 5, color: "bg-red-100" },
-];
-
 export const Dashboard = () => {
     const { user } = useUser();
     const { isAuthenticated, isLoading } = useConvexAuth();
@@ -37,7 +30,7 @@ export const Dashboard = () => {
             <Authenticated>
                 <div className="min-h-screen bg-background">
                     {/* Header */}
-                    <header className="border-b border-border bg-white/50 backdrop-blur-sm sticky top-0 z-10">
+                    <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-10">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <span className="text-2xl">🍳</span>
@@ -47,12 +40,8 @@ export const Dashboard = () => {
                             </div>
                             <div className="flex items-center gap-4">
                                 <div className="hidden md:flex relative">
-                                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                                    <Input
-                                        type="search"
-                                        placeholder="Search recipes..."
-                                        className="pl-9 w-64 bg-secondary/50 border-0 focus-visible:ring-1"
-                                    />
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input type="search" placeholder="Search recipes..." className="pl-9 w-64" />
                                 </div>
                                 <UserButton />
                             </div>
@@ -81,15 +70,16 @@ export const Dashboard = () => {
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     {!recipeBooks ? (
-                                        <div>You have no recipe books. Create your first one!</div>
+                                        <div className="text-muted-foreground col-span-2">
+                                            You have no recipe books. Create your first one!
+                                        </div>
                                     ) : (
                                         recipeBooks.map((recipeBook) => (
                                             <Card
                                                 key={recipeBook._id}
-                                                className="group hover:shadow-md transition-all cursor-pointer border-0 shadow-sm overflow-hidden">
-                                                <div
-                                                    className={`h-24 flex items-center justify-center group-hover:scale-105 transition-transform duration-500`}>
-                                                    <ChefHat className="h-10 w-10 text-black/10" />
+                                                className="group hover:shadow-lg transition-all duration-300 cursor-pointer hover:-translate-y-1">
+                                                <div className="h-24 bg-linear-to-br from-primary/10 to-accent/10 flex items-center justify-center rounded-t-lg">
+                                                    <ChefHat className="h-10 w-10 text-primary/40 group-hover:text-primary/60 transition-colors" />
                                                 </div>
                                                 <CardHeader className="pb-2">
                                                     <CardTitle className="text-lg">{recipeBook.name}</CardTitle>
@@ -102,7 +92,7 @@ export const Dashboard = () => {
                                     )}
 
                                     {/* Add New Book Card (Visual cue) */}
-                                    <Card className="border-2 border-dashed border-muted bg-transparent hover:bg-secondary/30 transition-colors cursor-pointer flex flex-col items-center justify-center h-50 gap-2 text-muted-foreground hover:text-primary">
+                                    <Card className="border-2 border-dashed border-border bg-transparent hover:bg-secondary/50 hover:border-primary/50 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center min-h-[200px] gap-2 text-muted-foreground hover:text-primary">
                                         <Plus className="h-8 w-8" />
                                         <span className="font-medium">Create New Book</span>
                                     </Card>
@@ -112,7 +102,7 @@ export const Dashboard = () => {
                             {/* Sidebar - Actions & Form */}
                             <div className="space-y-6">
                                 {/* Create Book Form */}
-                                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
+                                <Card className="shadow-lg">
                                     <CardHeader>
                                         <CardTitle className="flex items-center gap-2 text-primary">
                                             <Plus className="h-5 w-5" />
@@ -129,17 +119,15 @@ export const Dashboard = () => {
                                 </Card>
 
                                 {/* Quick Stats or Tips */}
-                                <Card className="border-0 bg-linear-to-br from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20">
+                                <Card className="bg-linear-to-br from-secondary to-accent/20">
                                     <CardContent className="pt-6">
                                         <div className="flex items-start gap-4">
-                                            <div className="p-2 bg-white rounded-lg shadow-sm">
-                                                <ChefHat className="h-6 w-6 text-orange-500" />
+                                            <div className="p-2 bg-card rounded-lg shadow-sm">
+                                                <ChefHat className="h-6 w-6 text-primary" />
                                             </div>
                                             <div>
-                                                <h3 className="font-semibold text-orange-900 dark:text-orange-100">
-                                                    Pro Tip
-                                                </h3>
-                                                <p className="text-sm text-orange-700/80 dark:text-orange-200/80 mt-1">
+                                                <h3 className="font-semibold text-foreground">Pro Tip</h3>
+                                                <p className="text-sm text-muted-foreground mt-1">
                                                     Organize recipes by occasion (e.g., "Christmas Dinner") to make meal
                                                     planning easier!
                                                 </p>

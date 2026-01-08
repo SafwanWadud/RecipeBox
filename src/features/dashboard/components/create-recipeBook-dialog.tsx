@@ -35,22 +35,22 @@ export const CreateRecipeBookDialog = () => {
                 </Button>
             </DialogTrigger>
 
-            <DialogContent>
+            <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-primary/10 rounded-lg">
+                        <div className="p-2.5 bg-linear-to-br from-primary/20 to-accent/20 rounded-xl">
                             <Book className="h-5 w-5 text-primary" />
                         </div>
                         <div>
-                            <DialogTitle>Create Recipe Book</DialogTitle>
+                            <DialogTitle className="text-lg">Create Recipe Book</DialogTitle>
                             <DialogDescription>Organize your recipes into collections</DialogDescription>
                         </div>
                     </div>
                 </DialogHeader>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6 pt-4">
                     <div className="space-y-2">
-                        <label htmlFor="book-name" className="text-sm font-medium leading-none">
+                        <label htmlFor="book-name" className="text-sm font-medium text-foreground">
                             Book Name
                         </label>
                         <Input
@@ -64,7 +64,10 @@ export const CreateRecipeBookDialog = () => {
                         />
                     </div>
 
-                    <DialogFooter>
+                    <DialogFooter className="gap-2 sm:gap-0">
+                        <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                            Cancel
+                        </Button>
                         <Button type="submit" disabled={!name.trim()}>
                             Create Book
                         </Button>
