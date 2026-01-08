@@ -12,7 +12,8 @@ import { ModeToggle } from "@/components/mode-toggle";
 export const Dashboard = () => {
     const { user } = useUser();
     const { isAuthenticated, isLoading } = useConvexAuth();
-    const recipeBooks = useQuery(api.recipeBooks.getMyRecipeBooks, isLoading && isAuthenticated ? {} : "skip");
+    const recipeBooks = useQuery(api.recipeBooks.getMyRecipeBooks);
+    // const recipeBooks = useQuery(api.recipeBooks.getMyRecipeBooks, isLoading && isAuthenticated ? {} : "skip");
 
     if (isLoading) {
         // Show loading state while user info is being fetched

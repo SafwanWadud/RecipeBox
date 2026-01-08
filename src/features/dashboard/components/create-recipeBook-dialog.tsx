@@ -11,19 +11,27 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus, Book } from "lucide-react";
+import { api } from "@convex/_generated/api";
+import { useMutation } from "convex/react";
 
 export const CreateRecipeBookDialog = () => {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState("");
+    const [isPending, setIsPending] = useState(false);
+    const createRecipeBook = useMutation(api.recipeBooks.createRecipeBook);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // TODO: Add your logic here to create the recipe book
-        console.log("Creating recipe book:", name);
-
-        // Reset form and close dialog after successful creation
-        // setName("");
-        // setOpen(false);
+        setIsPending(true);
+        try {
+            await createRecipeBook({ name: name.trim() });
+            setName("");
+            setOpen(false);
+        } catch (error) {
+            console.error("Failed to create recipe book:", error);
+        } finally {
+            setIsPending(false);
+        }
     };
 
     return (
@@ -66,6 +74,7 @@ export const CreateRecipeBookDialog = () => {
 
                     <DialogFooter className="gap-2 sm:gap-0">
                         <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                            {isPending && <span className="loader mr-2"></span>}
                             Cancel
                         </Button>
                         <Button type="submit" disabled={!name.trim()}>
