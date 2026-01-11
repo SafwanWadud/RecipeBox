@@ -1,6 +1,7 @@
 import { mutation, query, MutationCtx, QueryCtx } from "./_generated/server";
 import { v } from "convex/values";
 import { getCurrentUserOrThrow } from "./users";
+import { getAuthorizedDocument } from "./utils";
 
 export const getRecipe = query({
     args: {
@@ -55,17 +56,7 @@ export const updateRecipe = mutation({
         recipeBookId: v.optional(v.id("recipeBooks")),
     },
     handler: async (ctx: MutationCtx, args) => {
-        const user = await getCurrentUserOrThrow(ctx);
-
-        const recipe = await ctx.db.get("recipes", args.recipeId);
-
-        if (!recipe) {
-            throw new Error("Recipe not found");
-        }
-
-        if (recipe.userId !== user._id) {
-            throw new Error("You are not authorized to update this recipe");
-        }
+        const recipe = await getAuthorizedDocument(ctx, "recipes", args.recipeId);
 
         return await ctx.db.patch("recipes", args.recipeId, {
             name: args.name,
@@ -82,17 +73,7 @@ export const deleteRecipe = mutation({
         recipeId: v.id("recipes"),
     },
     handler: async (ctx: MutationCtx, args) => {
-        const user = await getCurrentUserOrThrow(ctx);
-
-        const recipe = await ctx.db.get("recipes", args.recipeId);
-
-        if (!recipe) {
-            throw new Error("Recipe not found");
-        }
-
-        if (recipe.userId !== user._id) {
-            throw new Error("You are not authorized to delete this recipe");
-        }
+        const recipe = await getAuthorizedDocument(ctx, "recipes", args.recipeId);
 
         await ctx.db.delete("recipes", args.recipeId);
     },

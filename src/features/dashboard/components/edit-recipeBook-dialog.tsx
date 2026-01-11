@@ -1,34 +1,39 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
-import { Plus, Book } from "lucide-react";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Book } from "lucide-react";
 import { api } from "@convex/_generated/api";
 import { useMutation } from "convex/react";
+import type { Id } from "@convex/_generated/dataModel";
 
-export const CreateRecipeBookDialog = () => {
-    const [open, setOpen] = useState(false);
-    const [name, setName] = useState("");
+interface EditRecipeBookDialogProps {
+    recipeBookId: Id<"recipeBooks">;
+    recipeBookName: string;
+    open: boolean;
+    setOpen: (open: boolean) => void;
+}
+
+export const EditRecipeBookDialog = ({ recipeBookId, recipeBookName, open, setOpen }: EditRecipeBookDialogProps) => {
+    const [name, setName] = useState(recipeBookName);
     const [isPending, setIsPending] = useState(false);
-    const createRecipeBook = useMutation(api.recipeBooks.createRecipeBook);
+    const updateRecipeBook = useMutation(api.recipeBooks.updateRecipeBook);
+
+    useEffect(() => {
+        if (open) {
+            setName(recipeBookName);
+        }
+    }, [open]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsPending(true);
         try {
-            await createRecipeBook({ name: name.trim() });
+            await updateRecipeBook({ recipeBookId, name: name.trim() });
             setName("");
             setOpen(false);
         } catch (error) {
-            console.error("Failed to create recipe book:", error);
+            console.error("Failed to update recipe book:", error);
         } finally {
             setIsPending(false);
         }
@@ -36,13 +41,6 @@ export const CreateRecipeBookDialog = () => {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button className="gap-2">
-                    <Plus className="h-4 w-4" />
-                    New Book
-                </Button>
-            </DialogTrigger>
-
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                     <div className="flex items-center gap-3">
@@ -50,8 +48,7 @@ export const CreateRecipeBookDialog = () => {
                             <Book className="h-5 w-5 text-primary" />
                         </div>
                         <div>
-                            <DialogTitle className="text-lg">Create Recipe Book</DialogTitle>
-                            <DialogDescription>Organize your recipes into collections</DialogDescription>
+                            <DialogTitle className="text-lg">Edit Recipe Book</DialogTitle>
                         </div>
                     </div>
                 </DialogHeader>
@@ -64,7 +61,6 @@ export const CreateRecipeBookDialog = () => {
                         <Input
                             id="book-name"
                             type="text"
-                            placeholder="e.g. Grandma's Desserts"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             className="w-full"
@@ -76,9 +72,14 @@ export const CreateRecipeBookDialog = () => {
                         <Button type="button" variant="outline" onClick={() => setOpen(false)}>
                             Cancel
                         </Button>
-                        <Button type="submit" disabled={!name.trim() || isPending}>
-                            {isPending && <span className="loader mr-2"></span>}
-                            Create Book
+                        <Button type="submit" disabled={!name.trim() || name.trim() === recipeBookName || isPending}>
+                            {isPending ? (
+                                <>
+                                    <span className="loader mr-2"></span> Saving...
+                                </>
+                            ) : (
+                                <>Save</>
+                            )}
                         </Button>
                     </DialogFooter>
                 </form>

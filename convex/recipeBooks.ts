@@ -1,6 +1,7 @@
 import { mutation, query, MutationCtx, QueryCtx } from "./_generated/server";
 import { v } from "convex/values";
 import { getCurrentUserOrThrow } from "./users";
+import { getAuthorizedDocument } from "./utils";
 
 export const getRecipeBook = query({
     args: {
@@ -48,22 +49,27 @@ export const createRecipeBook = mutation({
     },
 });
 
+export const updateRecipeBook = mutation({
+    args: {
+        recipeBookId: v.id("recipeBooks"),
+        name: v.string(),
+    },
+    handler: async (ctx: MutationCtx, args) => {
+        await getAuthorizedDocument(ctx, "recipeBooks", args.recipeBookId);
+        const recipeBook = await ctx.db.patch("recipeBooks", args.recipeBookId, {
+            name: args.name,
+        });
+        return recipeBook;
+    },
+});
+
 export const addRecipeToBook = mutation({
     args: {
         recipeBookId: v.id("recipeBooks"),
         recipeId: v.id("recipes"),
     },
     handler: async (ctx: MutationCtx, args) => {
-        const user = await getCurrentUserOrThrow(ctx);
-        const recipeBook = await ctx.db.get("recipeBooks", args.recipeBookId);
-
-        if (!recipeBook) {
-            throw new Error("Recipe book not found");
-        }
-
-        if (recipeBook.userId !== user._id) {
-            throw new Error("You are not authorized to add a recipe to this book");
-        }
+        const recipeBook = await getAuthorizedDocument(ctx, "recipeBooks", args.recipeBookId);
 
         recipeBook.recipes.push(args.recipeId);
         await ctx.db.patch("recipeBooks", args.recipeBookId, { recipes: recipeBook.recipes });
@@ -78,16 +84,7 @@ export const removeRecipeFromBook = mutation({
         recipeId: v.id("recipes"),
     },
     handler: async (ctx: MutationCtx, args) => {
-        const user = await getCurrentUserOrThrow(ctx);
-        const recipeBook = await ctx.db.get("recipeBooks", args.recipeBookId);
-
-        if (!recipeBook) {
-            throw new Error("Recipe book not found");
-        }
-
-        if (recipeBook.userId !== user._id) {
-            throw new Error("You are not authorized to remove a recipe from this book");
-        }
+        const recipeBook = await getAuthorizedDocument(ctx, "recipeBooks", args.recipeBookId);
 
         recipeBook.recipes = recipeBook.recipes.filter((id) => id !== args.recipeId);
         await ctx.db.patch("recipeBooks", args.recipeBookId, { recipes: recipeBook.recipes });
@@ -101,17 +98,7 @@ export const deleteRecipeBook = mutation({
         recipeBookId: v.id("recipeBooks"),
     },
     handler: async (ctx: MutationCtx, args) => {
-        const user = await getCurrentUserOrThrow(ctx);
-        const recipeBook = await ctx.db.get("recipeBooks", args.recipeBookId);
-
-        if (!recipeBook) {
-            throw new Error("Recipe book not found");
-        }
-
-        if (recipeBook.userId !== user._id) {
-            throw new Error("You are not authorized to delete this recipe book");
-        }
-
+        await getAuthorizedDocument(ctx, "recipeBooks", args.recipeBookId);
         await ctx.db.delete("recipeBooks", args.recipeBookId);
     },
 });

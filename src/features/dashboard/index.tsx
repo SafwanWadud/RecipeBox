@@ -3,11 +3,12 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Input } from "@/components/ui/input";
 import { UserButton, useUser } from "@clerk/clerk-react";
 import { Book, Plus, ChefHat, Search } from "lucide-react";
-import { Link, Navigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { api } from "@convex/_generated/api";
 import { useQuery } from "convex/react";
 import { CreateRecipeBookDialog } from "./components/create-recipeBook-dialog";
 import { ModeToggle } from "@/components/mode-toggle";
+import { RecipeBookDropdown } from "./components/recipebook-dropdown";
 
 export const Dashboard = () => {
     const { user } = useUser();
@@ -54,7 +55,7 @@ export const Dashboard = () => {
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {!recipeBooks ? (
+                            {!recipeBooks || recipeBooks.length === 0 ? (
                                 <div className="text-muted-foreground col-span-2">
                                     You have no recipe books. Create your first one!
                                 </div>
@@ -62,7 +63,13 @@ export const Dashboard = () => {
                                 recipeBooks.map((recipeBook) => (
                                     <Card
                                         key={recipeBook._id}
-                                        className="group hover:shadow-lg transition-all duration-300 cursor-pointer hover:-translate-y-1">
+                                        className="group relative hover:shadow-lg transition-all duration-300 cursor-pointer hover:-translate-y-1">
+                                        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                            <RecipeBookDropdown
+                                                recipeBookId={recipeBook._id}
+                                                recipeBookName={recipeBook.name}
+                                            />
+                                        </div>
                                         <div className="h-24 bg-linear-to-br from-primary/10 to-accent/10 flex items-center justify-center rounded-t-lg">
                                             <ChefHat className="h-10 w-10 text-primary/40 group-hover:text-primary/60 transition-colors" />
                                         </div>
