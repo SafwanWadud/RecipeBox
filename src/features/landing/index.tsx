@@ -42,7 +42,7 @@ export const Landing = () => {
                 {/* Navigation */}
                 <nav className="relative z-10 flex items-center justify-between px-6 py-4 md:px-12 lg:px-20">
                     <div className="flex items-center gap-2">
-                        <span className="text-3xl">🍳</span>
+                        <img src="/logo.png" alt="RecipeBox Logo" className="h-10 w-10 object-contain" />
                         <span className="text-xl font-bold text-white">RecipeBox</span>
                     </div>
                     <div className="flex items-center gap-3">
@@ -149,7 +149,7 @@ export const Landing = () => {
             <footer className="py-8 px-6 md:px-12 lg:px-20 border-t border-border">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
                     <div className="flex items-center gap-2">
-                        <span className="text-2xl">🍳</span>
+                        <img src="/logo.png" alt="RecipeBox Logo" className="h-8 w-8 object-contain" />
                         <span className="font-semibold text-foreground">RecipeBox</span>
                     </div>
                     <p className="text-sm text-muted-foreground">© 2026 RecipeBox. All rights reserved.</p>

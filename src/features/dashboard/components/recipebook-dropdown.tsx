@@ -11,8 +11,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { Id } from "@convex/_generated/dataModel";
-import { DeleteRecipeBookDialog } from "./delete-recipeBook-dialog";
-import { EditRecipeBookDialog } from "./edit-recipeBook-dialog";
+import { DeleteRecipeBookDialog } from "./delete-recipe-book-dialog";
+import { EditRecipeBookDialog } from "./edit-recipe-book-dialog";
 
 interface RecipeBookDropdownProps {
     recipeBookId: Id<"recipeBooks">;

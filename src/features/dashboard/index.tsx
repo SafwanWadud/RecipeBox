@@ -6,7 +6,7 @@ import { Book, Plus, ChefHat, Search } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { api } from "@convex/_generated/api";
 import { useQuery } from "convex/react";
-import { CreateRecipeBookDialog } from "./components/create-recipeBook-dialog";
+import { CreateRecipeBookDialog } from "./components/create-recipe-book-dialog";
 import { ModeToggle } from "@/components/mode-toggle";
 import { RecipeBookDropdown } from "./components/recipebook-dropdown";
 
@@ -20,7 +20,7 @@ export const Dashboard = () => {
             <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-10">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <span className="text-2xl">🍳</span>
+                        <img src="/logo.png" alt="RecipeBox Logo" className="h-10 w-10 object-contain" />
                         <Link to="/dashboard" className="text-xl font-bold text-foreground">
                             RecipeBox
                         </Link>
@@ -56,9 +56,10 @@ export const Dashboard = () => {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {!recipeBooks || recipeBooks.length === 0 ? (
-                                <div className="text-muted-foreground col-span-2">
-                                    You have no recipe books. Create your first one!
-                                </div>
+                                <Card className="border-2 border-dashed border-border bg-transparent hover:bg-secondary/50 hover:border-primary/50 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center min-h-[200px] gap-2 text-muted-foreground hover:text-primary">
+                                    <Plus className="h-8 w-8" />
+                                    <span className="font-medium">Create New Book</span>
+                                </Card>
                             ) : (
                                 recipeBooks.map((recipeBook) => (
                                     <Card
@@ -82,12 +83,6 @@ export const Dashboard = () => {
                                     </Card>
                                 ))
                             )}
-
-                            {/* Add New Book Card (Visual cue) */}
-                            <Card className="border-2 border-dashed border-border bg-transparent hover:bg-secondary/50 hover:border-primary/50 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center min-h-[200px] gap-2 text-muted-foreground hover:text-primary">
-                                <Plus className="h-8 w-8" />
-                                <span className="font-medium">Create New Book</span>
-                            </Card>
                         </div>
                     </div>
 
