@@ -1,25 +1,25 @@
-import { mutation, query, MutationCtx, QueryCtx } from "./_generated/server";
-import { v } from "convex/values";
-import { getCurrentUserOrThrow } from "./users";
-import { getAuthorizedDocument } from "./utils";
+import { mutation, query, MutationCtx, QueryCtx } from './_generated/server';
+import { v } from 'convex/values';
+import { getCurrentUserOrThrow } from './users';
+import { getAuthorizedDocument } from './utils';
 
 export const getRecipe = query({
     args: {
-        recipeId: v.id("recipes"),
+        recipeId: v.id('recipes'),
     },
     handler: async (ctx: QueryCtx, args) => {
-        return await ctx.db.get("recipes", args.recipeId);
+        return await ctx.db.get('recipes', args.recipeId);
     },
 });
 
 export const getRecipes = query({
     args: {
-        recipeBookId: v.id("recipeBooks"),
+        recipeBookId: v.id('recipeBooks'),
     },
     handler: async (ctx: QueryCtx, args) => {
         return await ctx.db
-            .query("recipes")
-            .withIndex("byRecipeBook", (q) => q.eq("recipeBookId", args.recipeBookId))
+            .query('recipes')
+            .withIndex('byRecipeBook', (q) => q.eq('recipeBookId', args.recipeBookId))
             .collect();
     },
 });
@@ -30,12 +30,12 @@ export const createRecipe = mutation({
         ingredients: v.optional(v.string()),
         directions: v.optional(v.string()),
         rating: v.optional(v.number()),
-        recipeBookId: v.id("recipeBooks"),
+        recipeBookId: v.id('recipeBooks'),
     },
     handler: async (ctx: MutationCtx, args) => {
         const user = await getCurrentUserOrThrow(ctx);
 
-        return await ctx.db.insert("recipes", {
+        return await ctx.db.insert('recipes', {
             name: args.name,
             ingredients: args.ingredients,
             directions: args.directions,
@@ -48,17 +48,17 @@ export const createRecipe = mutation({
 
 export const updateRecipe = mutation({
     args: {
-        recipeId: v.id("recipes"),
+        recipeId: v.id('recipes'),
         name: v.optional(v.string()),
         ingredients: v.optional(v.string()),
         directions: v.optional(v.string()),
         rating: v.optional(v.number()),
-        recipeBookId: v.optional(v.id("recipeBooks")),
+        recipeBookId: v.optional(v.id('recipeBooks')),
     },
     handler: async (ctx: MutationCtx, args) => {
-        await getAuthorizedDocument(ctx, "recipes", args.recipeId);
+        await getAuthorizedDocument(ctx, 'recipes', args.recipeId);
 
-        return await ctx.db.patch("recipes", args.recipeId, {
+        return await ctx.db.patch('recipes', args.recipeId, {
             name: args.name,
             ingredients: args.ingredients,
             directions: args.directions,
@@ -70,11 +70,11 @@ export const updateRecipe = mutation({
 
 export const deleteRecipe = mutation({
     args: {
-        recipeId: v.id("recipes"),
+        recipeId: v.id('recipes'),
     },
     handler: async (ctx: MutationCtx, args) => {
-        await getAuthorizedDocument(ctx, "recipes", args.recipeId);
+        await getAuthorizedDocument(ctx, 'recipes', args.recipeId);
 
-        await ctx.db.delete("recipes", args.recipeId);
+        await ctx.db.delete('recipes', args.recipeId);
     },
 });

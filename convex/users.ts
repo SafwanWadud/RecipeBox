@@ -1,6 +1,6 @@
-import { internalMutation, query, QueryCtx } from "./_generated/server";
-import { UserJSON } from "@clerk/backend";
-import { v, Validator } from "convex/values";
+import { internalMutation, query, QueryCtx } from './_generated/server';
+import { UserJSON } from '@clerk/backend';
+import { v, Validator } from 'convex/values';
 
 export const current = query({
     args: {},
@@ -19,7 +19,7 @@ export const upsertFromClerk = internalMutation({
 
         const user = await userByExternalId(ctx, data.id);
         if (user === null) {
-            await ctx.db.insert("users", userAttributes);
+            await ctx.db.insert('users', userAttributes);
         } else {
             await ctx.db.patch(user._id, userAttributes);
         }
@@ -55,7 +55,7 @@ export async function getCurrentUser(ctx: QueryCtx) {
 
 async function userByExternalId(ctx: QueryCtx, externalId: string) {
     return await ctx.db
-        .query("users")
-        .withIndex("byExternalId", (q) => q.eq("externalId", externalId))
+        .query('users')
+        .withIndex('byExternalId', (q) => q.eq('externalId', externalId))
         .unique();
 }

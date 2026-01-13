@@ -1,6 +1,6 @@
-import { Navigate, Outlet } from "@tanstack/react-router";
-import { Authenticated, AuthLoading, Unauthenticated } from "convex/react";
-import { LoadingPage } from "@/components/layout/loading-page";
+import { Navigate, Outlet } from '@tanstack/react-router';
+import { Authenticated, AuthLoading, Unauthenticated } from 'convex/react';
+import { LoadingPage } from '@/components/layout/loading-page';
 
 export const AuthenticatedLayout = () => {
     return (
@@ -12,7 +12,7 @@ export const AuthenticatedLayout = () => {
                 <Outlet />
             </Authenticated>
             <Unauthenticated>
-                <Navigate to="/" />
+                <Navigate to='/' />
             </Unauthenticated>
         </>
     );

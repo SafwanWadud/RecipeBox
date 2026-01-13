@@ -1,18 +1,10 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
-import { Plus, Book } from "lucide-react";
-import { api } from "@convex/_generated/api";
-import { useMutation } from "convex/react";
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Plus, Book } from 'lucide-react';
+import { api } from '@convex/_generated/api';
+import { useMutation } from 'convex/react';
 
 interface CreateRecipeBookDialogProps {
     open: boolean;
@@ -20,13 +12,13 @@ interface CreateRecipeBookDialogProps {
 }
 
 export const CreateRecipeBookDialog = ({ open, setOpen }: CreateRecipeBookDialogProps) => {
-    const [name, setName] = useState("");
+    const [name, setName] = useState('');
     const [isPending, setIsPending] = useState(false);
     const createRecipeBook = useMutation(api.recipeBooks.createRecipeBook);
 
     useEffect(() => {
         if (!open) {
-            setName("");
+            setName('');
         }
     }, [open]);
 
@@ -35,10 +27,10 @@ export const CreateRecipeBookDialog = ({ open, setOpen }: CreateRecipeBookDialog
         setIsPending(true);
         try {
             await createRecipeBook({ name: name.trim() });
-            setName("");
+            setName('');
             setOpen(false);
         } catch (error) {
-            console.error("Failed to create recipe book:", error);
+            console.error('Failed to create recipe book:', error);
         } finally {
             setIsPending(false);
         }
@@ -47,47 +39,47 @@ export const CreateRecipeBookDialog = ({ open, setOpen }: CreateRecipeBookDialog
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95">
-                    <Plus className="mr-2 h-5 w-5" />
+                <Button className='shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95'>
+                    <Plus className='mr-2 h-5 w-5' />
                     Add Book
                 </Button>
             </DialogTrigger>
 
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className='sm:max-w-md'>
                 <DialogHeader>
-                    <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-linear-to-br from-primary/20 to-accent/20 rounded-xl">
-                            <Book className="h-5 w-5 text-primary" />
+                    <div className='flex items-center gap-3'>
+                        <div className='p-2.5 bg-linear-to-br from-primary/20 to-accent/20 rounded-xl'>
+                            <Book className='h-5 w-5 text-primary' />
                         </div>
                         <div>
-                            <DialogTitle className="text-lg">Create Recipe Book</DialogTitle>
+                            <DialogTitle className='text-lg'>Create Recipe Book</DialogTitle>
                             <DialogDescription>Organize your recipes into collections</DialogDescription>
                         </div>
                     </div>
                 </DialogHeader>
 
-                <form onSubmit={handleSubmit} className="space-y-6 pt-4">
-                    <div className="space-y-2">
-                        <label htmlFor="book-name" className="text-sm font-medium text-foreground">
+                <form onSubmit={handleSubmit} className='space-y-6 pt-4'>
+                    <div className='space-y-2'>
+                        <label htmlFor='book-name' className='text-sm font-medium text-foreground'>
                             Name
                         </label>
                         <Input
-                            id="book-name"
-                            type="text"
+                            id='book-name'
+                            type='text'
                             placeholder="e.g. Grandma's Desserts"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="w-full"
+                            className='w-full'
                             autoFocus
                         />
                     </div>
 
-                    <DialogFooter className="sm:justify-between">
-                        <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                    <DialogFooter className='sm:justify-between'>
+                        <Button type='button' variant='outline' onClick={() => setOpen(false)}>
                             Cancel
                         </Button>
-                        <Button type="submit" disabled={!name.trim() || isPending}>
-                            {isPending && <span className="loader mr-2"></span>}
+                        <Button type='submit' disabled={!name.trim() || isPending}>
+                            {isPending && <span className='loader mr-2'></span>}
                             Create Book
                         </Button>
                     </DialogFooter>
