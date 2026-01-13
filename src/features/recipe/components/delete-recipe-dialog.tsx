@@ -12,35 +12,27 @@ import { AlertTriangle } from "lucide-react";
 import { api } from "@convex/_generated/api";
 import { useMutation } from "convex/react";
 import type { Id } from "@convex/_generated/dataModel";
-import { useNavigate } from "@tanstack/react-router";
 
-interface DeleteRecipeBookDialogProps {
-    recipeBookId: Id<"recipeBooks">;
-    recipeBookName: string;
+interface DeleteRecipeDialogProps {
+    recipeId: Id<"recipes">;
+    recipeName: string;
     open: boolean;
     setOpen: (open: boolean) => void;
 }
 
-export const DeleteRecipeBookDialog = ({
-    recipeBookId,
-    recipeBookName,
-    open,
-    setOpen,
-}: DeleteRecipeBookDialogProps) => {
-    const navigate = useNavigate();
+export const DeleteRecipeDialog = ({ recipeId, recipeName, open, setOpen }: DeleteRecipeDialogProps) => {
     const [isPending, setIsPending] = useState(false);
-    const deleteRecipeBook = useMutation(api.recipeBooks.deleteRecipeBook);
+    const deleteRecipe = useMutation(api.recipes.deleteRecipe);
 
     const handleDelete = async () => {
         setIsPending(true);
         try {
-            await deleteRecipeBook({ recipeBookId });
+            await deleteRecipe({ recipeId });
             setOpen(false);
         } catch (error) {
-            console.error("Failed to delete recipe book:", error);
+            console.error("Failed to delete recipe:", error);
         } finally {
             setIsPending(false);
-            navigate({ to: "/dashboard" });
         }
     };
 
@@ -53,11 +45,11 @@ export const DeleteRecipeBookDialog = ({
                             <AlertTriangle className="h-5 w-5 text-destructive" />
                         </div>
                         <div>
-                            <DialogTitle className="text-lg">Delete Recipe Book</DialogTitle>
+                            <DialogTitle className="text-lg">Delete Recipe</DialogTitle>
                             <DialogDescription>
                                 Are you sure you want to delete{" "}
-                                {recipeBookName ? <strong>"{recipeBookName}"</strong> : "this recipe book"}? This action
-                                cannot be undone.
+                                {recipeName ? <strong>"{recipeName}"</strong> : "this recipe"}? This action cannot be
+                                undone.
                             </DialogDescription>
                         </div>
                     </div>

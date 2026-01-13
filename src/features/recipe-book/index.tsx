@@ -10,6 +10,7 @@ import { useQuery } from "convex/react";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { CreateRecipeDialog } from "./components/create-recipe-dialog";
+import { RecipeBookDropdown } from "../dashboard/components/recipebook-dropdown";
 
 export const RecipeBook = () => {
     const [openCreateRecipeDialog, setOpenCreateRecipeDialog] = useState(false);
@@ -24,6 +25,10 @@ export const RecipeBook = () => {
         recipeBookId ? { recipeBookId: recipeBookId as Id<"recipeBooks"> } : "skip",
     );
     const [searchQuery, setSearchQuery] = useState("");
+
+    if (!recipeBook) {
+        return <div>Recipe book not found</div>;
+    }
 
     return (
         <div className="min-h-screen bg-background pb-20">
@@ -78,12 +83,10 @@ export const RecipeBook = () => {
                                 open={openCreateRecipeDialog}
                                 setOpen={setOpenCreateRecipeDialog}
                             />
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                className="rounded-full border-border/60 hover:border-primary hover:text-primary transition-all">
-                                <MoreHorizontal className="h-5 w-5" />
-                            </Button>
+                            <RecipeBookDropdown
+                                recipeBookId={recipeBookId as Id<"recipeBooks">}
+                                recipeBookName={recipeBook.name}
+                            />
                         </div>
                     </div>
                 </div>
@@ -113,6 +116,7 @@ export const RecipeBook = () => {
                         ?.filter((recipe) => recipe.name.toLowerCase().includes(searchQuery.trim().toLowerCase()))
                         .map((recipe) => (
                             <Card
+                                onClick={() => navigate({ to: `/recipe/${recipe._id}` })}
                                 key={recipe._id}
                                 className="group hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 transition-all duration-300 border-border/60 cursor-pointer overflow-hidden backdrop-blur-xs bg-card/80">
                                 <div className="h-48 bg-secondary/30 relative overflow-hidden">
@@ -120,34 +124,34 @@ export const RecipeBook = () => {
                                         <Utensils className="h-16 w-16" />
                                     </div>
                                 </div>
-                                <CardContent className="p-5">
+                                <CardContent>
                                     <h3 className="font-bold text-lg mb-2 line-clamp-1 group-hover:text-primary transition-colors">
                                         {recipe.name}
                                     </h3>
 
                                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                                         <div className="flex items-center gap-1.5">
-                                            <Timer className="h-4 w-4 text-primary/70" />
-                                            {recipe.totalTime ? (
-                                                recipe.totalTime
-                                            ) : (
-                                                <span className="text-muted-foreground">--</span>
+                                            {recipe.totalTime && (
+                                                <>
+                                                    <Timer className="h-4 w-4 text-primary/70" />
+                                                    {recipe.totalTime}
+                                                </>
                                             )}
                                         </div>
                                         <div className="flex items-center gap-1.5">
-                                            <Users className="h-4 w-4 text-primary/70" />
-                                            {recipe.servings ? (
-                                                recipe.servings
-                                            ) : (
-                                                <span className="text-muted-foreground">--</span>
+                                            {recipe.servings && (
+                                                <>
+                                                    <Users className="h-4 w-4 text-primary/70" />
+                                                    {recipe.servings}
+                                                </>
                                             )}
                                         </div>
                                         <div className="flex items-center gap-1.5">
-                                            <Flame className="h-4 w-4 text-primary/70" />
-                                            {recipe.calories ? (
-                                                recipe.calories
-                                            ) : (
-                                                <span className="text-muted-foreground">--</span>
+                                            {recipe.calories && (
+                                                <>
+                                                    <Flame className="h-4 w-4 text-primary/70" />
+                                                    {recipe.calories}
+                                                </>
                                             )}
                                         </div>
                                     </div>

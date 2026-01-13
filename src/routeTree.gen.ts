@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedRecipeRecipeIdRouteImport } from './routes/_authenticated/recipe/$recipeId'
 import { Route as AuthenticatedRecipeBookRecipeBookRouteImport } from './routes/_authenticated/recipe-book/$recipe-book'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
@@ -28,6 +29,12 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRecipeRecipeIdRoute =
+  AuthenticatedRecipeRecipeIdRouteImport.update({
+    id: '/recipe/$recipeId',
+    path: '/recipe/$recipeId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedRecipeBookRecipeBookRoute =
   AuthenticatedRecipeBookRecipeBookRouteImport.update({
     id: '/recipe-book/$recipe-book',
@@ -39,11 +46,13 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/recipe-book/$recipe-book': typeof AuthenticatedRecipeBookRecipeBookRoute
+  '/recipe/$recipeId': typeof AuthenticatedRecipeRecipeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/recipe-book/$recipe-book': typeof AuthenticatedRecipeBookRecipeBookRoute
+  '/recipe/$recipeId': typeof AuthenticatedRecipeRecipeIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -51,18 +60,24 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/recipe-book/$recipe-book': typeof AuthenticatedRecipeBookRecipeBookRoute
+  '/_authenticated/recipe/$recipeId': typeof AuthenticatedRecipeRecipeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/recipe-book/$recipe-book'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/recipe-book/$recipe-book'
+    | '/recipe/$recipeId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/recipe-book/$recipe-book'
+  to: '/' | '/dashboard' | '/recipe-book/$recipe-book' | '/recipe/$recipeId'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/_authenticated/dashboard'
     | '/_authenticated/recipe-book/$recipe-book'
+    | '/_authenticated/recipe/$recipeId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -93,6 +108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/recipe/$recipeId': {
+      id: '/_authenticated/recipe/$recipeId'
+      path: '/recipe/$recipeId'
+      fullPath: '/recipe/$recipeId'
+      preLoaderRoute: typeof AuthenticatedRecipeRecipeIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/recipe-book/$recipe-book': {
       id: '/_authenticated/recipe-book/$recipe-book'
       path: '/recipe-book/$recipe-book'
@@ -106,12 +128,14 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedRecipeBookRecipeBookRoute: typeof AuthenticatedRecipeBookRecipeBookRoute
+  AuthenticatedRecipeRecipeIdRoute: typeof AuthenticatedRecipeRecipeIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedRecipeBookRecipeBookRoute:
     AuthenticatedRecipeBookRecipeBookRoute,
+  AuthenticatedRecipeRecipeIdRoute: AuthenticatedRecipeRecipeIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
