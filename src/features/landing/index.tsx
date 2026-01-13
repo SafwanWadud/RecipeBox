@@ -2,6 +2,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SignInButton, SignUpButton, UserButton } from "@clerk/clerk-react";
+import { Link } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated } from "convex/react";
 
 const features = [
@@ -41,10 +42,12 @@ export const Landing = () => {
 
                 {/* Navigation */}
                 <nav className="relative z-10 flex items-center justify-between px-6 py-4 md:px-12 lg:px-20">
-                    <div className="flex items-center gap-2">
-                        <img src="/logo.png" alt="RecipeBox Logo" className="h-10 w-10 object-contain" />
-                        <span className="text-xl font-bold text-white">RecipeBox</span>
-                    </div>
+                    <Link to="/dashboard" className="text-xl font-bold text-foreground">
+                        <div className="flex items-center">
+                            <img src="/logo.png" alt="RecipeBox Logo" className="h-10 w-10 object-contain" />
+                            <span>RecipeBox</span>
+                        </div>
+                    </Link>
                     <div className="flex items-center gap-3">
                         <Unauthenticated>
                             <SignInButton>

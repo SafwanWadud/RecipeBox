@@ -13,16 +13,18 @@ import {
 import { Plus, Book } from "lucide-react";
 import { api } from "@convex/_generated/api";
 import { useMutation } from "convex/react";
+import type { Id } from "@convex/_generated/dataModel";
 
-interface CreateRecipeBookDialogProps {
+interface CreateRecipeDialogProps {
     open: boolean;
     setOpen: (open: boolean) => void;
+    recipeBookId: Id<"recipeBooks">;
 }
 
-export const CreateRecipeBookDialog = ({ open, setOpen }: CreateRecipeBookDialogProps) => {
+export const CreateRecipeDialog = ({ open, setOpen, recipeBookId }: CreateRecipeDialogProps) => {
     const [name, setName] = useState("");
     const [isPending, setIsPending] = useState(false);
-    const createRecipeBook = useMutation(api.recipeBooks.createRecipeBook);
+    const createRecipe = useMutation(api.recipes.createRecipe);
 
     useEffect(() => {
         if (!open) {
@@ -34,11 +36,11 @@ export const CreateRecipeBookDialog = ({ open, setOpen }: CreateRecipeBookDialog
         e.preventDefault();
         setIsPending(true);
         try {
-            await createRecipeBook({ name: name.trim() });
+            await createRecipe({ name: name.trim(), recipeBookId });
             setName("");
             setOpen(false);
         } catch (error) {
-            console.error("Failed to create recipe book:", error);
+            console.error("Failed to create recipe:", error);
         } finally {
             setIsPending(false);
         }
@@ -47,9 +49,11 @@ export const CreateRecipeBookDialog = ({ open, setOpen }: CreateRecipeBookDialog
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95">
+                <Button
+                    size="lg"
+                    className="shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95">
                     <Plus className="mr-2 h-5 w-5" />
-                    Add Book
+                    Add Recipe
                 </Button>
             </DialogTrigger>
 
@@ -60,8 +64,8 @@ export const CreateRecipeBookDialog = ({ open, setOpen }: CreateRecipeBookDialog
                             <Book className="h-5 w-5 text-primary" />
                         </div>
                         <div>
-                            <DialogTitle className="text-lg">Create Recipe Book</DialogTitle>
-                            <DialogDescription>Organize your recipes into collections</DialogDescription>
+                            <DialogTitle className="text-lg">Create Recipe</DialogTitle>
+                            <DialogDescription>Add a new recipe to your collection</DialogDescription>
                         </div>
                     </div>
                 </DialogHeader>
@@ -74,21 +78,20 @@ export const CreateRecipeBookDialog = ({ open, setOpen }: CreateRecipeBookDialog
                         <Input
                             id="book-name"
                             type="text"
-                            placeholder="e.g. Grandma's Desserts"
+                            placeholder="e.g. Pudding"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             className="w-full"
                             autoFocus
                         />
                     </div>
-
                     <DialogFooter className="sm:justify-between">
                         <Button type="button" variant="outline" onClick={() => setOpen(false)}>
                             Cancel
                         </Button>
                         <Button type="submit" disabled={!name.trim() || isPending}>
                             {isPending && <span className="loader mr-2"></span>}
-                            Create Book
+                            Create Recipe
                         </Button>
                     </DialogFooter>
                 </form>

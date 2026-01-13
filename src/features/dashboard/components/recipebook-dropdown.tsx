@@ -25,7 +25,7 @@ export const RecipeBookDropdown = ({ recipeBookId, recipeBookName }: RecipeBookD
 
     return (
         <>
-            <DropdownMenu modal={false}>
+            <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="outline" aria-label="Open menu" size="icon-sm">
                         <MoreHorizontalIcon />

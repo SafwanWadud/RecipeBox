@@ -43,7 +43,7 @@ export const createRecipeBook = mutation({
         const recipeBook = await ctx.db.insert("recipeBooks", {
             name: args.name,
             userId: user._id,
-            recipes: [],
+            description: "",
         });
         return recipeBook;
     },
@@ -52,43 +52,15 @@ export const createRecipeBook = mutation({
 export const updateRecipeBook = mutation({
     args: {
         recipeBookId: v.id("recipeBooks"),
-        name: v.string(),
+        name: v.optional(v.string()),
+        description: v.optional(v.string()),
     },
     handler: async (ctx: MutationCtx, args) => {
         await getAuthorizedDocument(ctx, "recipeBooks", args.recipeBookId);
         const recipeBook = await ctx.db.patch("recipeBooks", args.recipeBookId, {
             name: args.name,
+            description: args.description,
         });
-        return recipeBook;
-    },
-});
-
-export const addRecipeToBook = mutation({
-    args: {
-        recipeBookId: v.id("recipeBooks"),
-        recipeId: v.id("recipes"),
-    },
-    handler: async (ctx: MutationCtx, args) => {
-        const recipeBook = await getAuthorizedDocument(ctx, "recipeBooks", args.recipeBookId);
-
-        recipeBook.recipes.push(args.recipeId);
-        await ctx.db.patch("recipeBooks", args.recipeBookId, { recipes: recipeBook.recipes });
-
-        return recipeBook;
-    },
-});
-
-export const removeRecipeFromBook = mutation({
-    args: {
-        recipeBookId: v.id("recipeBooks"),
-        recipeId: v.id("recipes"),
-    },
-    handler: async (ctx: MutationCtx, args) => {
-        const recipeBook = await getAuthorizedDocument(ctx, "recipeBooks", args.recipeBookId);
-
-        recipeBook.recipes = recipeBook.recipes.filter((id) => id !== args.recipeId);
-        await ctx.db.patch("recipeBooks", args.recipeBookId, { recipes: recipeBook.recipes });
-
         return recipeBook;
     },
 });

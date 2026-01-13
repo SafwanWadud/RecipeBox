@@ -49,14 +49,14 @@ export const createRecipe = mutation({
 export const updateRecipe = mutation({
     args: {
         recipeId: v.id("recipes"),
-        name: v.string(),
+        name: v.optional(v.string()),
         ingredients: v.optional(v.string()),
         directions: v.optional(v.string()),
         rating: v.optional(v.number()),
         recipeBookId: v.optional(v.id("recipeBooks")),
     },
     handler: async (ctx: MutationCtx, args) => {
-        const recipe = await getAuthorizedDocument(ctx, "recipes", args.recipeId);
+        await getAuthorizedDocument(ctx, "recipes", args.recipeId);
 
         return await ctx.db.patch("recipes", args.recipeId, {
             name: args.name,
@@ -73,7 +73,7 @@ export const deleteRecipe = mutation({
         recipeId: v.id("recipes"),
     },
     handler: async (ctx: MutationCtx, args) => {
-        const recipe = await getAuthorizedDocument(ctx, "recipes", args.recipeId);
+        await getAuthorizedDocument(ctx, "recipes", args.recipeId);
 
         await ctx.db.delete("recipes", args.recipeId);
     },
